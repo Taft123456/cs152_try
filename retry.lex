@@ -3,6 +3,8 @@
 	#define YY_DECL yy::parser::symbol_type yylex()
 	#include "parser.tab.hh"
 	static yy::location loc;
+	int row = 1;
+	int col = 0;
 %}
 
 %option noyywrap 

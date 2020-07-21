@@ -1,8 +1,12 @@
 %{
 	#include <iostream>
+	#include <stdio.h>
+	#include <stdlib.h>
 	#define YY_DECL yy::parser::symbol_type yylex()
 	#include "parser.tab.hh"
 	static yy::location loc;
+	int row = 1;
+	int col = 0;
 %}
 
 %option noyywrap 
@@ -71,7 +75,7 @@ loc.step();
 "]"	         {col += yyleng; return yy::parser::make_R_SQUARE_BRACKET(loc);}
 ":="	         {col += yyleng; return yy::parser::make_ASSIGN(loc);}
 
-{DIGI}+          {col += yyleng; return yy::parser::make_NUMBER(atoi(yytext), loc);}	
+{DIGI}+          {col += yyleng; return yy::parser::make_NUMBER(itoa(yytext), loc);}	
 
 {LETT}({LETT}|{DIGI})*((_)+({LETT}|{DIGI})+)*   {col += yyleng; return yy::parser::make_IDENT(yytext, loc);}	
 

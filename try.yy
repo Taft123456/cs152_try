@@ -1,6 +1,6 @@
 %{
 	#include <stdio.h>
-	#include <stdlib.h>
+	#include <stdlib.h>      
 	int errorCode = 0;
 	int num = 0;
 	char IO = 'N';
@@ -26,10 +26,11 @@
 	#include <functional>
 	using namespace std;
 	struct s
-	{
-		string output;
-		list<string> id;
-	};
+        {
+                string output;
+                list<string> id;
+        };
+
 }
 
 
@@ -44,26 +45,26 @@
 	map<string, int> symbols;
         string labels()
         {
-                string r = "__temp__" + atoi(num);
+                string r = "__temp__" + itoa(num);
                 num++;
-		return r;
-        };	
-	string storeLabel = "";
-	string storeCenter = "";
-	string storePrevious = "";
-	string storeCombine = "";
-	string storeCurrent = "";
-	string storeNumber = "";
-	string storeArgument = "";
-	string storeCaller = "";
-	string storeVar = "";
-	string storeID = "";
-	string storeArray = "";
-	string storeIndex = "";
-	string storeName = "";
-	string storeValue = "";
-	string storeCondition = "";
-	string storeRelation = "";
+                return r;
+        };
+        string storeLabel = "";
+        string storeCenter = "";
+        string storePrevious = "";
+        string storeCombine = "";
+        string storeCurrent = "";
+        string storeNumber = "";
+        string storeArgument = "";
+        string storeCaller = "";
+        string storeVar = "";
+        string storeID = "";
+        string storeArray = "";
+        string storeIndex = "";
+        string storeName = "";
+        string storeValue = "";
+        string storeCondition = "";
+        string storeRelation = "";
 }
 
 %token END 0 "end of file";
@@ -82,7 +83,7 @@
 
 %type <string> IDENT NUMBER CONTINUE
 %type <string> functions function identifiers identifier statement statements expression expressions
-%type <string> term var vars bool_exp relation_and_exp relation_exp comp
+%type <string> term var vars bool_exp relation_and_exp relation_exp comp multiplicative_exp
 %type <s> declarations declaration
 
 %%
@@ -169,12 +170,12 @@ relation_and_exp: relation_exp				{$$ = $1;}
         ;
 
 relation_exp: NOT expression comp expression	        														       {$$ = $2; storeCurrent = storeArgument;                                                                                                                           $$ += $4; storePrevious = storeCurrent; storeCurrent = storeArgument;												  $$ += $3;																			   symbols.insert(pair<string, int>(labels(),num));                                                                                                                 $$ += "! " + symbols.begin()->first + ", " + storeRelation + "\n";                                                                                               storeCondition = symbols.begin()->first;                                                                                                                         storeRelation = symbols.begin()->first;                                                                                                                          storeType = 7; arith = 8;                                                                                                                                        symbols.erase(symbols.begin()->first);} 
-	| NOT TRUE					{$$ = $2;}
-	| NOT FALSE					{$$ = $2;}
-	| NOT L_PAREN bool_exp R_PAREN																	   {$$ = $2;																			     symbols.insert(pair<string, int>(labels(),num));                                                                                                                 $$ += "! " + symbols.begin()->first + ", " + storeRelation + "\n";                                                                                               storeCondition = symbols.begin()->first;                                                                                                                         storeRelation = symbols.begin()->first;                                                                                                                          storeType = 7; arith = 8;                                                                                                                                        symbols.erase(symbols.begin()->first);}
+	| NOT TRUE					{$$ = "";}
+	| NOT FALSE					{$$ = "";}
+	| NOT L_PAREN bool_exp R_PAREN																	   {$$ = $3;																			     symbols.insert(pair<string, int>(labels(),num));                                                                                                                 $$ += "! " + symbols.begin()->first + ", " + storeRelation + "\n";                                                                                               storeCondition = symbols.begin()->first;                                                                                                                         storeRelation = symbols.begin()->first;                                                                                                                          storeType = 7; arith = 8;                                                                                                                                        symbols.erase(symbols.begin()->first);}
 	| expression comp expression																	   {$$ = $1; storeCurrent = storeArgument;															     $$ += $3; storePrevious = storeCurrent; storeCurrent = storeArgument;											      $$ += $2;}
-	| TRUE						{$$ = $1;}
-	| FALSE						{$$ = $1;}
+	| TRUE						{$$ = "";}
+	| FALSE						{$$ = "";}
 	| L_PAREN bool_exp R_PAREN			{$$ = $2;}
         ;
 
